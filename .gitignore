@@ -28,3 +28,5 @@ szz/results
 szz/libs
 szz/gradle.properties
 .gradle
+
+model/data
