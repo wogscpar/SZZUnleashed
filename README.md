@@ -1,6 +1,6 @@
 # SZZUnleashed
 
-A implementation of the SZZ algorithm as described by Zeller et al's in ["When Do
+An implementation of the SZZ algorithm as described by Zeller et al's in ["When Do
 Changes Induce Fixes?"](https://www.st.cs.uni-saarland.de/papers/msr2005/). It
 also contains further improvements as described by Williams et al's in [Szz
 revisited: verifying when changes induce fixes](https://www.researchgate.net/publication/220854597_SZZ_revisited_verifying_when_changes_induce_fixes).
