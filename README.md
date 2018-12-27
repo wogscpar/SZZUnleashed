@@ -1,9 +1,8 @@
 # SZZUnleashed
 
-A implementation of the SZZ algorithm as described by Zeller et al's in ["When Do
-Changes Induce Fixes?"](https://www.st.cs.uni-saarland.de/papers/msr2005/). It
-also contains further improvements as described by Williams et al's in [Szz
-revisited: verifying when changes induce fixes](https://www.researchgate.net/publication/220854597_SZZ_revisited_verifying_when_changes_induce_fixes).
+A implementation of the SZZ algorithm as described by Śliwerski, Zimmermann, and Zeller in ["When Do
+Changes Induce Fixes?"](https://www.st.cs.uni-saarland.de/papers/msr2005/), Proc. of the Int'l Workshop on Mining Software Repositories, Saint Louis, Missouri, USA, May 2005. The implementation also contains further improvements as described by Williams and Spacco in ["SZZ
+Revisited: Verifying When Changes Induce Fixes"](https://www.researchgate.net/publication/220854597_SZZ_revisited_verifying_when_changes_induce_fixes).
 
 ## What is the usage of this algorithm?
 
