@@ -2,16 +2,15 @@
 __author__ = "Kristian Berg"
 __copyright__ = "Copyright (c) 2018 Axis Communications AB"
 __license__ = "MIT"
+__credits__ = ["Kristian Berg", "Oscar Svensson"]
 
+import argparse
 import subprocess
 import sys
 import json
 
-# Commits are saved in reverse chronological order from newest to oldest
-if __name__ == '__main__':
-    path_to_repo = sys.argv[1]
-
-    hashes = subprocess.run(['git', 'rev-list', '02d6908ada70fcf8012833ddef628bc09c6f8389'], cwd=path_to_repo,
+def git_log_to_json(init_hash, path_to_repo):
+    hashes = subprocess.run(['git', 'rev-list', init_hash], cwd=path_to_repo,
         stdout=subprocess.PIPE).stdout.decode('ascii').split()
 
     logs = []
@@ -27,3 +26,19 @@ if __name__ == '__main__':
 
     with open('gitlog.json', 'w') as f:
         f.write(json.dumps(logs))
+
+# Commits are saved in reverse chronological order from newest to oldest
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description="""Convert a git log output to json.
+                                                 """)
+    parser.add_argument('--from-commit', type=str, default="02d6908ada70fcf8012833ddef628bc09c6f8389",
+            help="A SHA-1 representing a commit. Runs git rev-list from this commit.")
+    parser.add_argument('--repo-path', type=str,
+            help="The absolute path to a local copy of the git repository from where the git log is taken.")
+
+    args = parser.parse_args()
+    path_to_repo = args.repo_path
+    init_hash = args.from_commit
+    git_log_to_json(init_hash, path_to_repo)
+
