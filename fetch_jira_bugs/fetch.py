@@ -3,6 +3,8 @@ __author__ = "Kristian Berg"
 __copyright__ = "Copyright (c) 2018 Axis Communications AB"
 __license__ = "MIT"
 
+from urllib.parse import quote
+
 import urllib.request as url
 import json
 import os
@@ -18,7 +20,7 @@ def fetch():
         + 'AND component = core '\
         + 'AND created <= "2018-02-20 10:34" '\
         + 'ORDER BY created DESC'
-    jql = jql.replace(' ', '%20')
+    jql = quote(jql, safe='')
 
     start_at = 0
 
