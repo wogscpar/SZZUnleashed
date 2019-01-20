@@ -27,13 +27,13 @@ system.
 ```python
 python fetch.py
 ```
-It creates a directory with issues. To convert these into a format where they can
+It creates a directory with issues. To convert these into a format from which they can
 be processed, use:
 ```python
 python git_log_to_array.py <path_to_local_repo>
 ```
 This creates a file `gitlog.json` that is used to link the issues to bug fixing
-commits. Using the `find_bug_fixes.py` and this file, we can get a json file
+commits. Using the `find_bug_fixes.py` and this file, we get a json file
 that contains the Issue and its corresponding commit SHA-1, the commit date,
 the creation date and the resolution date.
 
@@ -56,7 +56,7 @@ gradle build && gradle runJar
 ```
 
 The algorithm tries to use as many cores as possible during runtime. The more
-the merrier so to say.
+the merrier so to speak.
 
 To get the bug introducing commits from a repository using the file produced
 by the previous issue to bug fix commit step, run:
