@@ -27,7 +27,7 @@ system.
 ```python
 python fetch.py
 ```
-It creates a directory with issues. To convert these into a format from which they can
+It creates a subdirectory called "issues" where . To convert these into a format from which they can
 be processed, use:
 ```python
 python git_log_to_array.py <path_to_local_repo>
