@@ -22,20 +22,25 @@ be found.
 ## Usage SZZ algorithm
 
 ### Grab issues ###
-The fetch script is an example of how one can extract issues from a bug tracking
-system.
+To get issues one needs a bug tracking system. As an example the project Jenkins uses [JIRA](https://issues.jenkins-ci.org).
+From here it is possible to fetch issues that we then can link to bug fixing commits.
+
+So we have provided an example script that can be used to fetch issues from Jenkins issues. In the directory fetch_jira_bugs, one can find the **fetch.py** script. The script has a jql string which is used as a filter to get certain issues. JIRA provides a neat way to test these jql strings directly in the [web page](https://issues.jenkins-ci.org/browse/JENKINS-41020?jql=). Change to the advanced view and then enter the search creiterias. Notice that the jql string is generated in the browsers url bar once enter is hit.
+
+So to fetch issues from Jenkins JIRA, just run:
 ```python
 python fetch.py
 ```
-It creates a directory with issues. To convert these into a format where they can
-be processed, use:
+It creates a directory with issues. These issues will later on be used by the `find_bug_fixes.py` script. Second we need to convert the `git log` output to something that can be processed. That requires a local copy of the repository that we aim to analyze, [Jenkins Core Repository](https://github.com/jenkinsci/jenkins). Onced cloned, one can now run the **git_log_to_array.py** script. The script requires an absolute path to the cloned repository and optionally a SHA-1 for an initial commit.
 ```python
-python git_log_to_array.py <path_to_local_repo>
+python git_log_to_array.py --repo-path <path_to_local_repo>
 ```
-This creates a file `gitlog.json` that is used to link the issues to bug fixing
-commits. Using the `find_bug_fixes.py` and this file, we can get a json file
-that contains the Issue and its corresponding commit SHA-1, the commit date,
-the creation date and the resolution date.
+Once executed, this creates a file `gitlog.json` that can be used together with issues that we created with `fetch.py` script. Now using the `find_bug_fixes.py` and this file, we can get a json file
+that contains the Issue and its corresponding commit SHA-1, the commit date, the creation date and the resolution date. Just run:
+```python
+python find_bug_fixes.py --gitlog <path_to_gitlog_file> --issue-list <path_to_issues_directory>
+```
+The output is a `issue_list.json` which is later used in the SZZ algorithm.
 
 ### Find the bug introducing commits ###
 
@@ -62,7 +67,7 @@ To get the bug introducing commits from a repository using the file produced
 by the previous issue to bug fix commit step, run:
 
 ```shell
-java -jar szz_find_bug_introducers-<version_number>.jar -i <path_to_issues> -r <path_to_local_repo>
+java -jar szz_find_bug_introducers-<version_number>.jar -i <path_to_issue_list.json> -r <path_to_local_repo>
 ```
 To assemble the results if the algorithm was able to use more than one core,
 run the `assembler.py` script on the results directory.
