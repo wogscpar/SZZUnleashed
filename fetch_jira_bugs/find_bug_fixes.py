@@ -93,10 +93,14 @@ def commit_selector_heuristic(commits):
 
 def main():
     """ Main method """
-    parser = argparse.ArgumentParser(description='Identify bugfixes')
-    parser.add_argument('gitlog', metavar='G', type=str,
+    parser = argparse.ArgumentParser(description="""Identify bugfixes. Use this script together with a
+                                                    gitlog.json and a path with issues. The gitlog.json
+                                                    is created using the git_log_to_array.py script and
+                                                    the issue directory is created and populated using
+                                                    the fetch.py script.""")
+    parser.add_argument('--gitlog', type=str,
                         help='Path to json file containing gitlog')
-    parser.add_argument('issue_list', metavar='I', type=str,
+    parser.add_argument('--issue-list', type=str,
                         help='Path to directory containing issue json files')
     args = parser.parse_args()
 
