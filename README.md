@@ -1,15 +1,12 @@
 # SZZ Unleashed
 
-SZZ Unleashed is an implementation of the SZZ algorithm introduced by Śliwerski, Zimmermann, and Zeller in ["When Do Changes Induce Fixes?"](https://www.st.cs.uni-saarland.de/papers/msr2005/), in *Proc. of the International Workshop on Mining Software Repositories*, May 17, 2005. The implementation uses "line number mappings" as proposed by Williams and Spacco in [SZZ Revisited: Verifying When Changes Induce Fixes](https://www.researchgate.net/publication/220854597_SZZ_revisited_verifying_when_changes_induce_fixes), in *Proc. of the Workshop on Defects in Large Software Systems*, July 20, 2008.
+SZZ Unleashed is an implementation of the SZZ algorithm introduced by Śliwerski, Zimmermann, and Zeller in ["When Do Changes Induce Fixes?"](https://www.st.cs.uni-saarland.de/papers/msr2005/), in *Proc. of the International Workshop on Mining Software Repositories*, May 17, 2005. 
+The implementation uses "line number mappings" as proposed by Williams and Spacco in [SZZ Revisited: Verifying When Changes Induce Fixes](https://www.researchgate.net/publication/220854597_SZZ_revisited_verifying_when_changes_induce_fixes), in *Proc. of the Workshop on Defects in Large Software Systems*, July 20, 2008.
 
-## What is the usage of this algorithm?
+## What is the purpose of this algorithm?
 
-The SZZ algorithm is used to find bug introducing commits from a set of bug
-fixing commits. The bug introducing commits can be extracted either from a bug
-tracking system such as JIRA or simply by searching for commits that states that
-they are fixing something. The found bug introducing commits can then be used to
-build datasets for machine learning purposes such as when buggy commits wants to
-be found.
+The SZZ algorithm is used to find bug-introducing commits from a set of bug fixing commits. 
+The bug-introducing commits can be extracted either from a bug tracking system such as JIRA or simply by searching for commits that states that they are fixing something. The identified bug-introducing commits can then be used to support empirical software engineering research, e.g., defect prediction or software quality. As an example, the developers used this implementation to collect training data for a machine learning-based approach to risk classification of individual commits, i.e., training a classifier to highlight commits that deserve particularily careful code review. The work is described in a MSc. thesis from Lund University (in press).
 
 ## Prerequisites:
 
