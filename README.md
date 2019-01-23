@@ -1,9 +1,6 @@
-# SZZUnleashed
+# SZZ Unleashed
 
-A implementation of the SZZ algorithm as described by Zeller et al's in ["When Do
-Changes Induce Fixes?"](https://www.st.cs.uni-saarland.de/papers/msr2005/). It
-also contains further improvements as described by Williams et al's in [Szz
-revisited: verifying when changes induce fixes](https://www.researchgate.net/publication/220854597_SZZ_revisited_verifying_when_changes_induce_fixes).
+SZZ Unleashed is an implementation of the SZZ algorithm introduced by Śliwerski, Zimmermann, and Zeller in ["When Do Changes Induce Fixes?"](https://www.st.cs.uni-saarland.de/papers/msr2005/), in *Proc. of the International Workshop on Mining Software Repositories*, May 17, 2005. The implementation uses "line number mappings" as proposed by Williams and Spacco in [SZZ Revisited: Verifying When Changes Induce Fixes](https://www.researchgate.net/publication/220854597_SZZ_revisited_verifying_when_changes_induce_fixes), in *Proc. of the Workshop on Defects in Large Software Systems*, July 20, 2008.
 
 ## What is the usage of this algorithm?
 
