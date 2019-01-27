@@ -1,18 +1,12 @@
-# SZZUnleashed
+# SZZ Unleashed
 
-A implementation of the SZZ algorithm as described by Zeller et al's in ["When Do
-Changes Induce Fixes?"](https://www.st.cs.uni-saarland.de/papers/msr2005/). It
-also contains further improvements as described by Williams et al's in [Szz
-revisited: verifying when changes induce fixes](https://www.researchgate.net/publication/220854597_SZZ_revisited_verifying_when_changes_induce_fixes).
+SZZ Unleashed is an implementation of the SZZ algorithm introduced by Śliwerski, Zimmermann, and Zeller in ["When Do Changes Induce Fixes?"](https://www.st.cs.uni-saarland.de/papers/msr2005/), in *Proc. of the International Workshop on Mining Software Repositories*, May 17, 2005. 
+The implementation uses "line number mappings" as proposed by Williams and Spacco in [SZZ Revisited: Verifying When Changes Induce Fixes](https://www.researchgate.net/publication/220854597_SZZ_revisited_verifying_when_changes_induce_fixes), in *Proc. of the Workshop on Defects in Large Software Systems*, July 20, 2008.
 
-## What is the usage of this algorithm?
+## What is the purpose of this algorithm?
 
-The SZZ algorithm is used to find bug introducing commits from a set of bug
-fixing commits. The bug introducing commits can be extracted either from a bug
-tracking system such as JIRA or simply by searching for commits that states that
-they are fixing something. The found bug introducing commits can then be used to
-build datasets for machine learning purposes such as when buggy commits wants to
-be found.
+The SZZ algorithm is used to find bug-introducing commits from a set of bug fixing commits. 
+The bug-introducing commits can be extracted either from a bug tracking system such as JIRA or simply by searching for commits that states that they are fixing something. The identified bug-introducing commits can then be used to support empirical software engineering research, e.g., defect prediction or software quality. As an example, the developers used this implementation to collect training data for a machine learning-based approach to risk classification of individual commits, i.e., training a classifier to highlight commits that deserve particularily careful code review. The work is described in a MSc. thesis from Lund University (in press).
 
 ## Prerequisites:
 
@@ -25,9 +19,9 @@ be found.
 To get issues one needs a bug tracking system. As an example the project Jenkins uses [JIRA](https://issues.jenkins-ci.org).
 From here it is possible to fetch issues that we then can link to bug fixing commits.
 
-So we have provided an example script that can be used to fetch issues from Jenkins issues. In the directory fetch_jira_bugs, one can find the **fetch.py** script. The script has a jql string which is used as a filter to get certain issues. JIRA provides a neat way to test these jql strings directly in the [web page](https://issues.jenkins-ci.org/browse/JENKINS-41020?jql=). Change to the advanced view and then enter the search creiterias. Notice that the jql string is generated in the browsers url bar once enter is hit.
+We have provided an example script that can be used to fetch issues from Jenkins issues. In the directory fetch_jira_bugs, one can find the **fetch.py** script. The script has a jql string which is used as a filter to get certain issues. JIRA provides a neat way to test these jql strings directly in the [web page](https://issues.jenkins-ci.org/browse/JENKINS-41020?jql=). Change to the advanced view and then enter the search creiterias. Notice that the jql string is generated in the browsers url bar once enter is hit.
 
-So to fetch issues from Jenkins JIRA, just run:
+To fetch issues from Jenkins JIRA, just run:
 ```python
 python fetch.py
 ```
@@ -40,9 +34,9 @@ that contains the Issue and its corresponding commit SHA-1, the commit date, the
 ```python
 python find_bug_fixes.py --gitlog <path_to_gitlog_file> --issue-list <path_to_issues_directory>
 ```
-The output is a `issue_list.json` which is later used in the SZZ algorithm.
+The output is `issue_list.json` which is later used in the SZZ algorithm.
 
-### Find the bug introducing commits ###
+### Find the bug-introducing commits ###
 
 This implementation works regardless which language and file type. It uses
 [JGIT](https://www.eclipse.org/jgit/) to parse a git repository.
@@ -61,7 +55,7 @@ gradle build && gradle runJar
 ```
 
 The algorithm tries to use as many cores as possible during runtime. The more
-the merrier so to say.
+the merrier so to speak.
 
 To get the bug introducing commits from a repository using the file produced
 by the previous issue to bug fix commit step, run:
@@ -74,7 +68,7 @@ run the `assembler.py` script on the results directory.
 
 ## Output
 
-The output can then be seen in three different files commits.json,
+The output can be seen in three different files commits.json,
 annotations.json and fix\_and\_bug\_introducing\_pairs.json.
 
 The commits.json file includes all commits that have been blamed to be bug
@@ -89,12 +83,12 @@ just the one closest in history for a bug.
 
 Lastly, the fix\_and\_bug\_introducing\_pairs.json includes all possible pairs
 which could lead to a bug introduction and fix. This file is not sorted in any
-way and it includes doublettes when it comes to both introducers and fixes. A
+way and it includes duplicates when it comes to both introducers and fixes. A
 fix can be made several times and a introducer could be responsible for many
 fixes.
 
 ## Feature Extraction ##
-Now that the potential bug introducing commits has been identified, the
+Now that the potential bug-introducing commits has been identified, the
 repository can be mined for features.
 
 ### Code Churns ###
