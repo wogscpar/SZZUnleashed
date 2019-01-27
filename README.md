@@ -12,6 +12,8 @@ The bug-introducing commits can be extracted either from a bug tracking system s
 
 * Java 8
 * Gradle
+  
+All scripts and compilations has been tested on Linux and Mac.
 
 ## Usage SZZ algorithm
 
