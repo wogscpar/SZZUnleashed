@@ -63,8 +63,6 @@ by the previous issue to bug fix commit step, run:
 ```shell
 java -jar szz_find_bug_introducers-<version_number>.jar -i <path_to_issue_list.json> -r <path_to_local_repo>
 ```
-To assemble the results if the algorithm was able to use more than one core,
-run the `assembler.py` script on the results directory.
 
 ## Output
 
