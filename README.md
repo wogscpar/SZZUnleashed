@@ -14,8 +14,18 @@ The bug-introducing commits can be extracted either from a bug tracking system s
 
 * Java 8
 * Gradle
+  
+All scripts and compilations has been tested on Linux and Mac.
 
-## Usage SZZ algorithm
+To use docker, one needs Docker installed as well.
+
+# Table of Contents
+1. [Usage SZZ algorithm](#szz_usage)
+2. [SZZ with Docker](#szz_docker)
+3. [Feature Extraction](#feat_extract)
+4. [Authors](#authors)
+
+## Usage SZZ algorithm <a name="szz_usage"></a>
 
 ### Grab issues ###
 To get issues one needs a bug tracking system. As an example the project Jenkins uses [JIRA](https://issues.jenkins-ci.org).
@@ -65,8 +75,6 @@ by the previous issue to bug fix commit step, run:
 ```shell
 java -jar szz_find_bug_introducers-<version_number>.jar -i <path_to_issue_list.json> -r <path_to_local_repo>
 ```
-To assemble the results if the algorithm was able to use more than one core,
-run the `assembler.py` script on the results directory.
 
 ## Output
 
@@ -89,7 +97,31 @@ way and it includes duplicates when it comes to both introducers and fixes. A
 fix can be made several times and a introducer could be responsible for many
 fixes.
 
-## Feature Extraction ##
+## Use Docker to generate fix_and_bug_introducing_pairs.json. <a name="szz_docker"></a>
+
+There exist a *Dockerfile* in the repository. It contains all the steps in chronological order that is needed to generate the **fix\_and\_bug\_introducing\_pairs.json**. Simply run this command in the directory where the Dockerfile is located:
+
+```bash
+docker build -t ssz .
+```
+
+Then start a temporary docker container:
+```bash
+docker run -it --name szz_con szz ash
+```
+In this container it is possible to study the results from the algorithm. The results are located in */root/szz/results*.
+
+Lastly, to copy the results from the container to your own computer run:
+```bash
+docker cp szz_con:/root/szz/results .
+```
+
+Note that the temporary container must be running while the *docker cp* command is executed. To be sure, check that the *szz_con* is listed when running:
+```bash
+docker ps
+```
+
+## Feature Extraction <a name="feat_extract"></a>
 Now that the potential bug-introducing commits has been identified, the
 repository can be mined for features.
 
@@ -190,7 +222,7 @@ be made. To do this, simply run the model script in the model directory:
 python model.py train
 ```
 
-## Authors
+## Authors <a name="authors"></a>
 
 [Oscar Svensson](mailto:wgcp92@gmail.com)
 [Kristian Berg](mailto:kristianberg.jobb@gmail.com)
