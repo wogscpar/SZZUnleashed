@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="""Convert a git log output to json.
                                                  """)
-    parser.add_argument('--from-commit', type=str, default="02d6908ada70fcf8012833ddef628bc09c6f8389",
+    parser.add_argument('--from-commit', type=str,
             help="A SHA-1 representing a commit. Runs git rev-list from this commit.")
     parser.add_argument('--repo-path', type=str,
             help="The absolute path to a local copy of the git repository from where the git log is taken.")
