@@ -20,17 +20,17 @@ All scripts and compilations has been tested on Linux and Mac.
 To use docker, one needs Docker installed as well.
 
 # Table of Contents
-1. [Usage SZZ algorithm](#szz_usage)
-2. [SZZ with Docker](#szz_docker)
-3. [Feature Extraction](#feat_extract)
+1. [Running SZZ Unleashed](#szz_usage)
+2. [SZZ Unleashed with Docker](#szz_docker)
+3. [Example Application: Training a Classifier for Just-in-Time Bug Prediction](#feat_extract)
 4. [Authors](#authors)
 
-## Usage SZZ algorithm <a name="szz_usage"></a>
+## Running SZZ Unleashed <a name="szz_usage"></a>
 The figure shows the SZZ Unleashed workflow, i.e., running three Python scripts followed by executing the final jar-file.
 
 ![SZZ Unleashed workflow](/workflow.png)
 
-### Grab issues ###
+### Fetch issues ###
 To get issues one needs a bug tracking system. As an example the project Jenkins uses [JIRA](https://issues.jenkins-ci.org).
 From here it is possible to fetch issues that we then can link to bug fixing commits.
 
@@ -99,7 +99,7 @@ way and it includes duplicates when it comes to both introducers and fixes. A
 fix can be made several times and a introducer could be responsible for many
 fixes.
 
-## Use Docker to generate fix_and_bug_introducing_pairs.json. <a name="szz_docker"></a>
+## Use SZZ Unleashed with Docker <a name="szz_docker"></a>
 
 There exists a *Dockerfile* in the repository. It contains all the steps in chronological order that is needed to generate the **fix\_and\_bug\_introducing\_pairs.json**. Simply run this command in the directory where the Dockerfile is located:
 
@@ -123,9 +123,8 @@ Note that the temporary container must be running while the *docker cp* command 
 docker ps
 ```
 
-## Feature Extraction <a name="feat_extract"></a>
-Now that the potential bug-introducing commits has been identified, the
-repository can be mined for features.
+## Example Application: Training a Classifier for Just-in-Time Bug Prediction <a name="feat_extract"></a>
+To illustrate what the output from SZZ Unleashed can be used for, we show how to train a classifier for Just-in-Time Bug prediction, i.e., predicting if individual commits are bug-introducing or not. We now have a set of bug-introducing commits and a set or correct commits. We proceed by representing individual commits by a set of features, based on previous research on bug prediction. 
 
 ### Code Churns ###
 The most simple features are the code churns. These are easily extracted by
@@ -151,32 +150,32 @@ To extract the diffusion features, just run:
 `python assemble_diffusion_features.py --repository <path_to_repo> --branch <branch>`
 
 ### Experience Features ###
-Maybe the most uncomfortable feature group. The experience features are the
-features that measures how much experience a developer has, both how recent
-but also how much experience the developer has overall with the code.
+Maybe the most sensitive feature group. The experience features are the
+features that measure how much experience a developer has, calculated based on both overall 
+activity in the repository and recent activity.
 
 The features are:
 
 1. Overall experience.
 2. Recent experience.
 
-The script builds a graph to keep track of each authors experience. So the intial
+The script builds a graph to keep track of each authors experience. The intial
 run is:
 `python assemble_experience_features.py --repository <repo_path> --branch <branch> --save-graph`
 
-This will result in a graph which the script could use for future analysis
+This results in a graph that the script below uses for future analysis
 
 To rerun the analysis without generating a new graph, just run:
 `python assemble_experience_features.py --repository <repo_path> --branch <branch>`
 
 ### History Features ###
-The history are as follows:
+The history is represented by the following:
 
 1. The number of authors in a file.
 2. The time between contributions made by the author.
 3. The number of unique changes between the last commit.
 
-The same as with the experience features, the script must initially generate a graph
+Analogous to the experience features, the script must initially generate a graph
 where the file meta data is saved.
 `python assemble_history_features.py --repository <repo_path> --branch <branch> --save-graph`
 
@@ -184,22 +183,22 @@ To rerun the script without generating a new graph, use:
 `python assemble_history_features.py --repository <repo_path> --branch <branch>`
 
 ### Purpose Features ###
-The purpose feature is just a single feature and that is if the commit is a fix o
-not. To extract it use:
+The purpose feature is just a binary feature representing whether a commit is a fix or
+not. This feature can be extracted by running:
 
 `python assemble_purpose_features.py --repository <repo_path> --branch <branch>`
 
 ### Coupling ###
-A more complex number of features are the coupling features. These indicates
+A more complex type of features are the coupling features. These indicate
 how strong the relation is between files and modules for a revision. This means
-that two files can have a realtion even though they don't have a realtion
-inside the source code itself. So by mining these, features that gives
-indications in how many files that a commit actually has made changes to are
+that two files can have a relation even though they don't have a relation
+inside the source code itself. By mining these, features that give
+indications of how many files that a commit actually has made changes to are
 found.
 
-The mining is made by a docker image containing the tool code-maat.
+The mining is made by a Docker image containing the tool code-maat.
 
-These features takes long time to extract but is mined using:
+Note that calculating these features is time-consuming. They are extracted by:
 
 ```python
 python assemble_features.py --image code-maat --repo-dir <path_to_repo> --result-dir <path_to_write_result>
@@ -210,16 +209,16 @@ It is also possible to specify which commits to analyze. This is done with the
 CLI option `--commits <path_to_file_with_commits>`. The format of this file is
 just lines where each line is equal to the corresponding commit SHA-1.
 
-If the analyzation is made by several docker containers, one has to specify
+If the analysis is made by several Docker containers, one has to specify
 the `--assemble` option which stands for assemble. This will collect and store
 all results in a single directory.
 
-The script is capable of checking if the are any commits that haven't been
+The script can check if there are any commits that haven't been
 analyzed. To do that, specify the `--missing-commits` option.
 
 ## Classification ##
-Now that data has been assembled the training and testing of the ML model can
-be made. To do this, simply run the model script in the model directory:
+Now that all features have been extracted, the training and testing of the machine learning classifier can
+be made. In this example, we train a random forest classifier. To do this, run the model script in the model directory:
 ```python
 python model.py train
 ```
