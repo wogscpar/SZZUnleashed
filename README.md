@@ -26,6 +26,9 @@ To use docker, one needs Docker installed as well.
 4. [Authors](#authors)
 
 ## Usage SZZ algorithm <a name="szz_usage"></a>
+The figure shows the SZZ Unleashed workflow, i.e., running three Python scripts followed by executing the final jar-file.
+
+![SZZ Unleashed workflow](/workflow.png)
 
 ### Grab issues ###
 To get issues one needs a bug tracking system. As an example the project Jenkins uses [JIRA](https://issues.jenkins-ci.org).
