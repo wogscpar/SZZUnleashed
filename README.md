@@ -5,27 +5,21 @@ The implementation uses "line number mappings" as proposed by Williams and Spacc
 
 This repository responds to the call for public SZZ implementations by Rodríguez-Pérez, Robles, and González-Barahona. ["Reproducibility and Credibility in Empirical Software Engineering: A Case Study Based on a Systematic Literature Review of the use of the SZZ Algorithm"](https://www.researchgate.net/publication/323843822_Reproducibility_and_Credibility_in_Empirical_Software_Engineering_A_Case_Study_based_on_a_Systematic_Literature_Review_of_the_use_of_the_SZZ_algorithm), *Information and Software Technology*, Volume 99, 2018.
 
-## What is the purpose of this algorithm?
-
-The SZZ algorithm is used to find bug-introducing commits from a set of bug fixing commits. 
-The bug-introducing commits can be extracted either from a bug tracking system such as JIRA or simply by searching for commits that states that they are fixing something. The identified bug-introducing commits can then be used to support empirical software engineering research, e.g., defect prediction or software quality. As an example, the developers used this implementation to collect training data for a machine learning-based approach to risk classification of individual commits, i.e., training a classifier to highlight commits that deserve particularily careful code review. The work is described in a MSc. thesis from Lund University (in press).
-
-## Prerequisites:
-
-* Java 8
-* Gradle
-  
-All scripts and compilations has been tested on Linux and Mac.
-
-To use docker, one needs Docker installed as well.
-
 # Table of Contents
-1. [Running SZZ Unleashed](#szz_usage)
-2. [SZZ Unleashed with Docker](#szz_docker)
-3. [Example Application: Training a Classifier for Just-in-Time Bug Prediction](#feat_extract)
-4. [Authors](#authors)
+1. [Background](#background)
+2. [Running SZZ Unleashed](#szz_usage)
+3. [SZZ Unleashed with Docker](#szz_docker)
+4. [Example Application: Training a Classifier for Just-in-Time Bug Prediction](#feat_extract)
+5. [Authors](#authors)
+
+## Background <a name="background"></a>
+
+The SZZ algorithm is used to find bug-introducing commits from a set of bug-fixing commits. 
+The bug-introducing commits can be extracted either from a bug tracking system such as Jira or simply by searching for commits that state that they are fixing something. The identified bug-introducing commits can then be used to support empirical software engineering research, e.g., defect prediction or software quality. As an example, this implementation has been used to collect training data for a machine learning-based approach to risk classification of individual commits, i.e., training a random forest classifier to highlight commits that deserve particularily careful code review. The work is described in a MSc. thesis from Lund University (in press).
 
 ## Running SZZ Unleashed <a name="szz_usage"></a>
+Building and running SZZ Unleashed requires Java 8 and Gradle. Python is required to run the supporting scripts and Docker must be installed to use the provided Docker images. All scripts and compilations has been tested on Linux and Mac, and partly on Windows 10.
+
 The figure shows the SZZ Unleashed workflow, i.e., running three Python scripts followed by executing the final jar-file.
 
 ![SZZ Unleashed workflow](/workflow.png)
