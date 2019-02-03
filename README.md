@@ -1,45 +1,44 @@
 # SZZ Unleashed
 
 SZZ Unleashed is an implementation of the SZZ algorithm introduced by Śliwerski, Zimmermann, and Zeller in ["When Do Changes Induce Fixes?"](https://www.st.cs.uni-saarland.de/papers/msr2005/), in *Proc. of the International Workshop on Mining Software Repositories*, May 17, 2005. 
-The implementation uses "line number mappings" as proposed by Williams and Spacco in [SZZ Revisited: Verifying When Changes Induce Fixes](https://www.researchgate.net/publication/220854597_SZZ_revisited_verifying_when_changes_induce_fixes), in *Proc. of the Workshop on Defects in Large Software Systems*, July 20, 2008.
+The implementation uses "line number mappings" as proposed by Williams and Spacco in ["SZZ Revisited: Verifying When Changes Induce Fixes"](https://www.researchgate.net/publication/220854597_SZZ_revisited_verifying_when_changes_induce_fixes), in *Proc. of the Workshop on Defects in Large Software Systems*, July 20, 2008.
 
-## What is the purpose of this algorithm?
-
-The SZZ algorithm is used to find bug-introducing commits from a set of bug fixing commits. 
-The bug-introducing commits can be extracted either from a bug tracking system such as JIRA or simply by searching for commits that states that they are fixing something. The identified bug-introducing commits can then be used to support empirical software engineering research, e.g., defect prediction or software quality. As an example, the developers used this implementation to collect training data for a machine learning-based approach to risk classification of individual commits, i.e., training a classifier to highlight commits that deserve particularily careful code review. The work is described in a MSc. thesis from Lund University (in press).
-
-## Prerequisites:
-
-* Java 8
-* Gradle
-  
-All scripts and compilations has been tested on Linux and Mac.
-
-To use docker, one needs Docker installed as well.
+This repository responds to the call for public SZZ implementations by Rodríguez-Pérez, Robles, and González-Barahona. ["Reproducibility and Credibility in Empirical Software Engineering: A Case Study Based on a Systematic Literature Review of the use of the SZZ Algorithm"](https://www.researchgate.net/publication/323843822_Reproducibility_and_Credibility_in_Empirical_Software_Engineering_A_Case_Study_based_on_a_Systematic_Literature_Review_of_the_use_of_the_SZZ_algorithm), *Information and Software Technology*, Volume 99, 2018.
 
 # Table of Contents
-1. [Usage SZZ algorithm](#szz_usage)
-2. [SZZ with Docker](#szz_docker)
-3. [Feature Extraction](#feat_extract)
-4. [Authors](#authors)
+1. [Background](#background)
+2. [Running SZZ Unleashed](#szz_usage)
+3. [SZZ Unleashed with Docker](#szz_docker)
+4. [Example Application: Training a Classifier for Just-in-Time Bug Prediction](#feat_extract)
+5. [Authors](#authors)
 
-## Usage SZZ algorithm <a name="szz_usage"></a>
+## Background <a name="background"></a>
 
-### Grab issues ###
+The SZZ algorithm is used to find bug-introducing commits from a set of bug-fixing commits. 
+The bug-introducing commits can be extracted either from a bug tracking system such as Jira or simply by searching for commits that state that they are fixing something. The identified bug-introducing commits can then be used to support empirical software engineering research, e.g., defect prediction or software quality. As an example, this implementation has been used to collect training data for a machine learning-based approach to risk classification of individual commits, i.e., training a random forest classifier to highlight commits that deserve particularily careful code review. The work is described in a MSc. thesis from Lund University (in press).
+
+## Running SZZ Unleashed <a name="szz_usage"></a>
+Building and running SZZ Unleashed requires Java 8 and Gradle. Python is required to run the supporting scripts and Docker must be installed to use the provided Docker images. All scripts and compilations has been tested on Linux and Mac, and partly on Windows 10.
+
+The figure shows the SZZ Unleashed workflow, i.e., running three Python scripts followed by executing the final jar-file.
+
+![SZZ Unleashed workflow](/workflow.png) <a name="workflow"></a>
+
+### Fetch issues ###
 To get issues one needs a bug tracking system. As an example the project Jenkins uses [JIRA](https://issues.jenkins-ci.org).
 From here it is possible to fetch issues that we then can link to bug fixing commits.
 
-We have provided an example script that can be used to fetch issues from Jenkins issues. In the directory fetch_jira_bugs, one can find the **fetch.py** script. The script has a jql string which is used as a filter to get certain issues. JIRA provides a neat way to test these jql strings directly in the [web page](https://issues.jenkins-ci.org/browse/JENKINS-41020?jql=). Change to the advanced view and then enter the search creiterias. Notice that the jql string is generated in the browsers url bar once enter is hit.
+We have provided an example script that can be used to fetch issues from Jenkins issues (see 1) in the [figure](#workflow)). In the directory fetch_jira_bugs, one can find the **fetch.py** script. The script has a jql string which is used as a filter to get certain issues. JIRA provides a neat way to test these jql strings directly in the [web page](https://issues.jenkins-ci.org/browse/JENKINS-41020?jql=). Change to the advanced view and then enter the search creiterias. Notice that the jql string is generated in the browsers url bar once enter is hit.
 
 To fetch issues from Jenkins JIRA, just run:
 ```python
 python fetch.py
 ```
-It creates a directory with issues. These issues will later on be used by the `find_bug_fixes.py` script. Second we need to convert the `git log` output to something that can be processed. That requires a local copy of the repository that we aim to analyze, [Jenkins Core Repository](https://github.com/jenkinsci/jenkins). Onced cloned, one can now run the **git_log_to_array.py** script. The script requires an absolute path to the cloned repository and optionally a SHA-1 for an initial commit.
+It creates a directory with issues (see issues folder in the [figure](#workflow)). These issues will later on be used by the `find_bug_fixes.py` script. Second we need to convert the `git log` output to something that can be processed. That requires a local copy of the repository that we aim to analyze, [Jenkins Core Repository](https://github.com/jenkinsci/jenkins). Onced cloned, one can now run the **git_log_to_array.py** script (see 2) in the [figure](#workflow)). The script requires an absolute path to the cloned repository and optionally a SHA-1 for an initial commit.
 ```python
 python git_log_to_array.py --repo-path <path_to_local_repo>
 ```
-Once executed, this creates a file `gitlog.json` that can be used together with issues that we created with `fetch.py` script. Now using the `find_bug_fixes.py` and this file, we can get a json file
+Once executed, this creates a file `gitlog.json` that can be used together with issues that we created with `fetch.py` script. Now using the `find_bug_fixes.py` (see 3) in the [figure](#workflow)) and this file, we can get a json file
 that contains the Issue and its corresponding commit SHA-1, the commit date, the creation date and the resolution date. Just run:
 ```python
 python find_bug_fixes.py --gitlog <path_to_gitlog_file> --issue-list <path_to_issues_directory>
@@ -64,11 +63,10 @@ Or if the algorithm should be runned without building a jar:
 gradle build && gradle runJar
 ```
 
-The algorithm tries to use as many cores as possible during runtime. The more
-the merrier so to speak.
+The algorithm tries to use as many cores as possible during runtime.
 
 To get the bug introducing commits from a repository using the file produced
-by the previous issue to bug fix commit step, run:
+by the previous issue to bug fix commit step, run (see 4) in the [figure](#workflow)):
 
 ```shell
 java -jar szz_find_bug_introducers-<version_number>.jar -i <path_to_issue_list.json> -r <path_to_local_repo>
@@ -76,7 +74,7 @@ java -jar szz_find_bug_introducers-<version_number>.jar -i <path_to_issue_list.j
 
 ## Output
 
-The output can be seen in three different files commits.json,
+As shown in the [figure](#workflow), the output consists of three different files: commits.json,
 annotations.json and fix\_and\_bug\_introducing\_pairs.json.
 
 The commits.json file includes all commits that have been blamed to be bug
@@ -95,9 +93,9 @@ way and it includes duplicates when it comes to both introducers and fixes. A
 fix can be made several times and a introducer could be responsible for many
 fixes.
 
-## Use Docker to generate fix_and_bug_introducing_pairs.json. <a name="szz_docker"></a>
+## Use SZZ Unleashed with Docker <a name="szz_docker"></a>
 
-There exist a *Dockerfile* in the repository. It contains all the steps in chronological order that is needed to generate the **fix\_and\_bug\_introducing\_pairs.json**. Simply run this command in the directory where the Dockerfile is located:
+There exists a *Dockerfile* in the repository. It contains all the steps in chronological order that is needed to generate the **fix\_and\_bug\_introducing\_pairs.json**. Simply run this command in the directory where the Dockerfile is located:
 
 ```bash
 docker build -t ssz .
@@ -119,9 +117,8 @@ Note that the temporary container must be running while the *docker cp* command 
 docker ps
 ```
 
-## Feature Extraction <a name="feat_extract"></a>
-Now that the potential bug-introducing commits has been identified, the
-repository can be mined for features.
+## Example Application: Training a Classifier for Just-in-Time Bug Prediction <a name="feat_extract"></a>
+To illustrate what the output from SZZ Unleashed can be used for, we show how to train a classifier for Just-in-Time Bug prediction, i.e., predicting if individual commits are bug-introducing or not. We now have a set of bug-introducing commits and a set or correct commits. We proceed by representing individual commits by a set of features, based on previous research on bug prediction. 
 
 ### Code Churns ###
 The most simple features are the code churns. These are easily extracted by
@@ -147,32 +144,32 @@ To extract the diffusion features, just run:
 `python assemble_diffusion_features.py --repository <path_to_repo> --branch <branch>`
 
 ### Experience Features ###
-Maybe the most uncomfortable feature group. The experience features are the
-features that measures how much experience a developer has, both how recent
-but also how much experience the developer has overall with the code.
+Maybe the most sensitive feature group. The experience features are the
+features that measure how much experience a developer has, calculated based on both overall 
+activity in the repository and recent activity.
 
 The features are:
 
 1. Overall experience.
 2. Recent experience.
 
-The script builds a graph to keep track of each authors experience. So the intial
+The script builds a graph to keep track of each authors experience. The intial
 run is:
 `python assemble_experience_features.py --repository <repo_path> --branch <branch> --save-graph`
 
-This will result in a graph which the script could use for future analysis
+This results in a graph that the script below uses for future analysis
 
 To rerun the analysis without generating a new graph, just run:
 `python assemble_experience_features.py --repository <repo_path> --branch <branch>`
 
 ### History Features ###
-The history are as follows:
+The history is represented by the following:
 
 1. The number of authors in a file.
 2. The time between contributions made by the author.
 3. The number of unique changes between the last commit.
 
-The same as with the experience features, the script must initially generate a graph
+Analogous to the experience features, the script must initially generate a graph
 where the file meta data is saved.
 `python assemble_history_features.py --repository <repo_path> --branch <branch> --save-graph`
 
@@ -180,22 +177,22 @@ To rerun the script without generating a new graph, use:
 `python assemble_history_features.py --repository <repo_path> --branch <branch>`
 
 ### Purpose Features ###
-The purpose feature is just a single feature and that is if the commit is a fix o
-not. To extract it use:
+The purpose feature is just a binary feature representing whether a commit is a fix or
+not. This feature can be extracted by running:
 
 `python assemble_purpose_features.py --repository <repo_path> --branch <branch>`
 
 ### Coupling ###
-A more complex number of features are the coupling features. These indicates
+A more complex type of features are the coupling features. These indicate
 how strong the relation is between files and modules for a revision. This means
-that two files can have a realtion even though they don't have a realtion
-inside the source code itself. So by mining these, features that gives
-indications in how many files that a commit actually has made changes to are
+that two files can have a relation even though they don't have a relation
+inside the source code itself. By mining these, features that give
+indications of how many files that a commit actually has made changes to are
 found.
 
-The mining is made by a docker image containing the tool code-maat.
+The mining is made by a Docker image containing the tool code-maat.
 
-These features takes long time to extract but is mined using:
+Note that calculating these features is time-consuming. They are extracted by:
 
 ```python
 python assemble_features.py --image code-maat --repo-dir <path_to_repo> --result-dir <path_to_write_result>
@@ -206,16 +203,16 @@ It is also possible to specify which commits to analyze. This is done with the
 CLI option `--commits <path_to_file_with_commits>`. The format of this file is
 just lines where each line is equal to the corresponding commit SHA-1.
 
-If the analyzation is made by several docker containers, one has to specify
+If the analysis is made by several Docker containers, one has to specify
 the `--assemble` option which stands for assemble. This will collect and store
 all results in a single directory.
 
-The script is capable of checking if the are any commits that haven't been
+The script can check if there are any commits that haven't been
 analyzed. To do that, specify the `--missing-commits` option.
 
 ## Classification ##
-Now that data has been assembled the training and testing of the ML model can
-be made. To do this, simply run the model script in the model directory:
+Now that all features have been extracted, the training and testing of the machine learning classifier can
+be made. In this example, we train a random forest classifier. To do this, run the model script in the model directory:
 ```python
 python model.py train
 ```
