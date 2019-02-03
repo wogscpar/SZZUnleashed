@@ -20,11 +20,11 @@ The bug-introducing commits can be extracted either from a bug tracking system s
 ## Running SZZ Unleashed <a name="szz_usage"></a>
 Building and running SZZ Unleashed requires Java 8 and Gradle. Python is required to run the supporting scripts and Docker must be installed to use the provided Docker images. All scripts and compilations has been tested on Linux and Mac, and partly on Windows 10.
 
-The figure shows the SZZ Unleashed workflow, i.e., running three Python scripts followed by executing the final jar-file.
+The figure shows a suggested workflow consisting of four steps. Step 1 and Step 2 are pre-steps needed to collect and format required data. Step 3 is SZZ Phase 1, i.e., identifying bug-fixing commits. Step 4 is SZZ Phase 2, i.e., identyfying bug-introducing commits. Steps 1-3 are implemented in Python scripts, whereas Step 4 is implemented in Java.
 
 ![SZZ Unleashed workflow](/workflow.png) <a name="workflow"></a>
 
-### Fetch issues ###
+### Step 1. Fetch issues (SZZ pre-step) ###
 To get issues one needs a bug tracking system. As an example the project Jenkins uses [JIRA](https://issues.jenkins-ci.org).
 From here it is possible to fetch issues that we then can link to bug fixing commits.
 
