@@ -29,16 +29,15 @@ To use docker, one needs Docker installed as well.
 To get issues one needs a bug tracking system. As an example the project Jenkins uses [JIRA](https://issues.jenkins-ci.org).
 From here it is possible to fetch issues that we then can link to bug fixing commits.
 
-We have provided an example script that can be used to fetch issues from a project on JIRA. In the directory fetch_jira_bugs, one can find the **fetch.py** script. The script has a jql string which is used as a filter to get certain issues. JIRA provides a neat way to test these jql strings directly in the web page of the considered project: e.g., Jenkins [web page](https://issues.jenkins-ci.org/browse/JENKINS-41020?jql=). Change to the advanced view and then enter the search criterias. Notice that the jql string is generated in the browsers url bar once enter is hit.
+We have provided an example script that can be used to fetch issues from Jenkins issues. In the directory fetch_jira_bugs, one can find the **fetch.py** script. The script has a jql string which is used as a filter to get certain issues. JIRA provides a neat way to test these jql strings directly in the [web page](https://issues.jenkins-ci.org/browse/JENKINS-41020?jql=). Change to the advanced view and then enter the search creiterias. Notice that the jql string is generated in the browsers url bar once enter is hit.
 
-To fetch issues from a JIRA project, just run:
+To fetch issues from Jenkins JIRA, just run:
 ```python
-python fetch.py --issue-code <issue_code_used_on_Jira> --jira-project <name_of_the_jira_project_repository>
+python fetch.py
 ```
-Issue-code is the code used on JIRA to label each issue (e.g., JENKINS, in the Jenkins project), while Jira-project is the name of the JIRA project repository (e.g., issues.jenkins-ci.org).
-It creates a directory with issues. These issues will later on be used by the `find_bug_fixes.py` script. Second we need to convert the `git log` output to something that can be processed. That requires a local copy of the repository that we aim to analyze, [Jenkins Core Repository](https://github.com/jenkinsci/jenkins). Onced cloned, one can now run the **git_log_to_array.py** script. The script requires an absolute path to the cloned repository and a SHA-1 for an initial commit: e.g., "02d6908ada70fcf8012833ddef628bc09c6f8389" considering the Jenkins project).
+It creates a directory with issues. These issues will later on be used by the `find_bug_fixes.py` script. Second we need to convert the `git log` output to something that can be processed. That requires a local copy of the repository that we aim to analyze, [Jenkins Core Repository](https://github.com/jenkinsci/jenkins). Onced cloned, one can now run the **git_log_to_array.py** script. The script requires an absolute path to the cloned repository and optionally a SHA-1 for an initial commit.
 ```python
-python git_log_to_array.py --repo-path <path_to_local_repo> --from-commit <sha-1_of_the_initial_commit>
+python git_log_to_array.py --repo-path <path_to_local_repo>
 ```
 Once executed, this creates a file `gitlog.json` that can be used together with issues that we created with `fetch.py` script. Now using the `find_bug_fixes.py` and this file, we can get a json file
 that contains the Issue and its corresponding commit SHA-1, the commit date, the creation date and the resolution date. Just run:
