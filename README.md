@@ -28,7 +28,7 @@ The figure shows a suggested workflow consisting of four steps. Step 1 and Step 
 To get issues one needs a bug tracking system. As an example the project Jenkins uses [JIRA](https://issues.jenkins-ci.org).
 From here it is possible to fetch issues that we then can link to bug fixing commits.
 
-We have provided an example script that can be used to fetch issues from Jenkins issues (see 1) in the [figure](#workflow). In the directory fetch_jira_bugs, one can find the **fetch.py** script. The script has a jql string which is used as a filter to get certain issues. JIRA provides a neat way to test these jql strings directly in the [web page](https://issues.jenkins-ci.org/browse/JENKINS-41020?jql=). Change to the advanced view and then enter the search criteria. Notice that the jql string is generated in the browser's url bar once enter is hit.
+We have provided an example script that can be used to fetch issues from Jenkins issues (see 1 in the [figure](#workflow)). In the directory fetch_jira_bugs, one can find the **fetch.py** script. The script has a jql string which is used as a filter to get certain issues. JIRA provides a neat way to test these jql strings directly in the [web page](https://issues.jenkins-ci.org/browse/JENKINS-41020?jql=). Change to the advanced view and then enter the search criteria. Notice that the jql string is generated in the browser's url bar once enter is hit.
 
 To fetch issues from Jenkins JIRA, just run:
 ```python
