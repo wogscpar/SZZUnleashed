@@ -28,18 +28,17 @@ The figure shows the SZZ Unleashed workflow, i.e., running three Python scripts 
 To get issues one needs a bug tracking system. As an example the project Jenkins uses [JIRA](https://issues.jenkins-ci.org).
 From here it is possible to fetch issues that we then can link to bug fixing commits.
 
-We have provided an example script that can be used to fetch issues from Jenkins issues (see 1) in the [figure](#workflow). In the directory fetch_jira_bugs, one can find the **fetch.py** script. The script has a jql string which is used as a filter to get certain issues. JIRA provides a neat way to test these jql strings directly in the [web page](https://issues.jenkins-ci.org/browse/JENKINS-41020?jql=). Change to the advanced view and then enter the search criteria. Notice that the jql string is generated in the browser's url bar once enter is hit.
+We have provided an example script that can be used to fetch issues from Jenkins issues (see 1) in the [figure](#workflow)). In the directory fetch_jira_bugs, one can find the **fetch.py** script. The script has a jql string which is used as a filter to get certain issues. JIRA provides a neat way to test these jql strings directly in the [web page](https://issues.jenkins-ci.org/browse/JENKINS-41020?jql=). Change to the advanced view and then enter the search creiterias. Notice that the jql string is generated in the browsers url bar once enter is hit.
 
-To fetch issues from Jenkins JIRA, just run: 
+To fetch issues from Jenkins JIRA, just run:
 ```python
-python fetch.py --issue-code <issue_code> --jira-project <jira_project_base_url>
+python fetch.py
 ```
-passing as parameters the code used for the project issues on JIRA and the name of the JIRA repository of the project (e.g., _issues.jenkins-ci.org_). 
-The script creates a directory with issues (see issues folder in the [figure](#workflow)). These issues will later on be used by the `find_bug_fixes.py` script. Second we need to convert the `git log` output to something that can be processed. That requires a local copy of the repository that we aim to analyze, [Jenkins Core Repository](https://github.com/jenkinsci/jenkins). Onced cloned, one can now run the **git_log_to_array.py** script (see 2) in the [figure](#workflow)). The script requires an absolute path to the cloned repository and a SHA-1 for an initial commit.
+It creates a directory with issues (see issues folder in the [figure](#workflow)). These issues will later on be used by the `find_bug_fixes.py` script. Second we need to convert the `git log` output to something that can be processed. That requires a local copy of the repository that we aim to analyze, [Jenkins Core Repository](https://github.com/jenkinsci/jenkins). Onced cloned, one can now run the **git_log_to_array.py** script (see 2) in the [figure](#workflow)). The script requires an absolute path to the cloned repository and optionally a SHA-1 for an initial commit.
 ```python
-python git_log_to_array.py --from-commit <SHA-1_of_initial_commit> --repo-path <path_to_local_repo>
+python git_log_to_array.py --repo-path <path_to_local_repo>
 ```
-Once executed, this creates a file `gitlog.json` that can be used together with issues that we created with `fetch.py` script. Now using the `find_bug_fixes.py` (see 3) in the [figure](#workflow) and this file, we can get a json file
+Once executed, this creates a file `gitlog.json` that can be used together with issues that we created with `fetch.py` script. Now using the `find_bug_fixes.py` (see 3) in the [figure](#workflow)) and this file, we can get a json file
 that contains the Issue and its corresponding commit SHA-1, the commit date, the creation date and the resolution date. Just run:
 ```python
 python find_bug_fixes.py --gitlog <path_to_gitlog_file> --issue-list <path_to_issues_directory>
@@ -58,7 +57,7 @@ like:
 gradle build && gradle fatJar
 ```
 
-Or if the algorithm should be run without building a jar:
+Or if the algorithm should be runned without building a jar:
 
 ```shell
 gradle build && gradle runJar
@@ -67,7 +66,7 @@ gradle build && gradle runJar
 The algorithm tries to use as many cores as possible during runtime.
 
 To get the bug introducing commits from a repository using the file produced
-by the previous issue to bug fix commit step, run (see 4) in the [figure](#workflow):
+by the previous issue to bug fix commit step, run (see 4) in the [figure](#workflow)):
 
 ```shell
 java -jar szz_find_bug_introducers-<version_number>.jar -i <path_to_issue_list.json> -r <path_to_local_repo>
@@ -154,7 +153,7 @@ The features are:
 1. Overall experience.
 2. Recent experience.
 
-The script builds a graph to keep track of each authors experience. The initial
+The script builds a graph to keep track of each authors experience. The intial
 run is:
 `python assemble_experience_features.py --repository <repo_path> --branch <branch> --save-graph`
 
