@@ -20,11 +20,11 @@ The bug-introducing commits can be extracted either from a bug tracking system s
 ## Running SZZ Unleashed <a name="szz_usage"></a>
 Building and running SZZ Unleashed requires Java 8 and Gradle. Python is required to run the supporting scripts and Docker must be installed to use the provided Docker images. All scripts and compilations has been tested on Linux and Mac, and partly on Windows 10.
 
-The figure shows the SZZ Unleashed workflow, i.e., running three Python scripts followed by executing the final jar-file.
+The figure shows a suggested workflow consisting of four steps. Step 1 and Step 2 are pre-steps needed to collect and format required data. Step 3 is SZZ Phase 1, i.e., identifying bug-fixing commits. Step 4 is SZZ Phase 2, i.e., identyfying bug-introducing commits. Steps 1-3 are implemented in Python scripts, whereas Step 4 is implemented in Java.
 
 ![SZZ Unleashed workflow](/workflow.png) <a name="workflow"></a>
 
-### Fetch issues ###
+### Step 1. Fetch issues (SZZ pre-step) ###
 To get issues one needs a bug tracking system. As an example the project Jenkins uses [JIRA](https://issues.jenkins-ci.org).
 From here it is possible to fetch issues that we then can link to bug fixing commits.
 
@@ -34,19 +34,24 @@ To fetch issues from Jenkins JIRA, just run:
 ```python
 python fetch.py
 ```
-It creates a directory with issues (see issues folder in the [figure](#workflow)). These issues will later on be used by the `find_bug_fixes.py` script. Second we need to convert the `git log` output to something that can be processed. That requires a local copy of the repository that we aim to analyze, [Jenkins Core Repository](https://github.com/jenkinsci/jenkins). Onced cloned, one can now run the **git_log_to_array.py** script (see 2) in the [figure](#workflow)). The script requires an absolute path to the cloned repository and optionally a SHA-1 for an initial commit.
+It creates a directory with issues (see issues folder in the [figure](#workflow)). These issues will later on be used by the `find_bug_fixes.py` script. 
+
+### Step 2. Preprocess the git log output (SZZ pre-step) ###
+Second we need to convert the `git log` output to something that can be processed. That requires a local copy of the repository that we aim to analyze, [Jenkins Core Repository](https://github.com/jenkinsci/jenkins). Onced cloned, one can now run the **git_log_to_array.py** script (see 2) in the [figure](#workflow)). The script requires an absolute path to the cloned repository and optionally a SHA-1 for an initial commit.
 ```python
 python git_log_to_array.py --repo-path <path_to_local_repo>
 ```
-Once executed, this creates a file `gitlog.json` that can be used together with issues that we created with `fetch.py` script. Now using the `find_bug_fixes.py` (see 3) in the [figure](#workflow)) and this file, we can get a json file
+Once executed, this creates a file `gitlog.json` that can be used together with issues that we created with `fetch.py` script. 
+
+### Step 3. Identify bug-fixing commits (SZZ Phase 1) ###
+Now using the `find_bug_fixes.py` (see 3) in the [figure](#workflow)) and this file, we can get a json file
 that contains the Issue and its corresponding commit SHA-1, the commit date, the creation date and the resolution date. Just run:
 ```python
 python find_bug_fixes.py --gitlog <path_to_gitlog_file> --issue-list <path_to_issues_directory>
 ```
 The output is `issue_list.json` which is later used in the SZZ algorithm.
 
-### Find the bug-introducing commits ###
-
+### Identify bug-introducing commits (SZZ Phase 2) ###
 This implementation works regardless which language and file type. It uses
 [JGIT](https://www.eclipse.org/jgit/) to parse a git repository.
 
@@ -72,8 +77,7 @@ by the previous issue to bug fix commit step, run (see 4) in the [figure](#workf
 java -jar szz_find_bug_introducers-<version_number>.jar -i <path_to_issue_list.json> -r <path_to_local_repo>
 ```
 
-## Output
-
+## Output from SZZ Unleashed
 As shown in the [figure](#workflow), the output consists of three different files: commits.json,
 annotations.json and fix\_and\_bug\_introducing\_pairs.json.
 
