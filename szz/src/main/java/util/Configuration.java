@@ -48,6 +48,9 @@ public class Configuration {
   private String resPath = "results";
   private String partialFixPattern = "fix";
 
+  public String helpHeader = "Commandline options for the SZZ algorithm.";
+  public String helpFooter = "The results will be produced in ./results";
+
   protected Configuration() {}
 
   public static Configuration getInstance() {
@@ -66,11 +69,18 @@ public class Configuration {
 
     CommandLineParser parser = new DefaultParser();
     CommandLine cmd = null;
+    Options options = getCMDOptions();
     try {
-      cmd = parser.parse(getCMDOptions(), args);
+      cmd = parser.parse(options, args);
     } catch (ParseException e) {
       logger.warn(e.getMessage());
       System.exit(1);
+    }
+
+    if (cmd.hasOption("h")) {
+      HelpFormatter helpForm = new HelpFormatter();
+      helpForm.printHelp("SZZ", instance.getHelpHeader(), options, instance.getHelpFooter(), true);
+      System.exit(0);
     }
 
     if (cmd.hasOption("i")) {
@@ -113,6 +123,14 @@ public class Configuration {
     }
 
     return instance;
+  }
+
+  public String getHelpFooter() {
+    return helpFooter;
+  }
+
+  public String getHelpHeader() {
+    return helpHeader;
   }
 
   public int getDepth() {
@@ -181,6 +199,10 @@ public class Configuration {
 
   private static Options getCMDOptions() {
     Options options = new Options();
+
+    Option help_option = new Option("h", false, "Print help message");
+    help_option.setRequired(false);
+    options.addOption(help_option);
 
     Option issue_option = new Option("i", true, "Path to the issue file.");
     issue_option.setRequired(false);
