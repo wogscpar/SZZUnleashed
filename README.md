@@ -10,7 +10,8 @@ This repository responds to the call for public SZZ implementations by Rodrígue
 2. [Running SZZ Unleashed](#szz_usage)
 3. [SZZ Unleashed with Docker](#szz_docker)
 4. [Example Application: Training a Classifier for Just-in-Time Bug Prediction](#feat_extract)
-5. [Authors](#authors)
+5. [Examples and executables](#examples_n_exec)
+6. [Authors](#authors)
 
 ## Background <a name="background"></a>
 
@@ -36,12 +37,16 @@ python fetch.py --issue-code <issue_code> --jira-project <jira_project_base_url>
 ```
 passing as parameters the code used for the project issues on JIRA and the name of the JIRA repository of the project (e.g., _issues.jenkins-ci.org_). The script creates a directory with issues (see issues folder in the [figure](#workflow)). These issues will later on be used by the `find_bug_fixes.py` script. 
 
+A more thorough example of this script can be found [here](./examples/Fetch.md).
+
 ### Step 2. Preprocess the git log output (SZZ pre-step) ###
 Second we need to convert the `git log` output to something that can be processed. That requires a local copy of the repository that we aim to analyze, [Jenkins Core Repository](https://github.com/jenkinsci/jenkins). Onced cloned, one can now run the **git_log_to_array.py** script (see 2 in the [figure](#workflow)). The script requires an absolute path to the cloned repository and a SHA-1 for an initial commit.
 ```python
 python git_log_to_array.py --from-commit <SHA-1_of_initial_commit> --repo-path <path_to_local_repo>
 ```
 Once executed, this creates a file `gitlog.json` that can be used together with issues that we created with `fetch.py` script. 
+
+An example of this script and what it produces can be found [in the examples](./examples/GitlogToArray.md).
 
 ### Step 3. Identify bug-fixing commits (SZZ Phase 1) ###
 Now using the `find_bug_fixes.py` (see 3 in the [figure](#workflow)) and this file, we can get a json file
@@ -50,6 +55,8 @@ that contains the Issue and its corresponding commit SHA-1, the commit date, the
 python find_bug_fixes.py --gitlog <path_to_gitlog_file> --issue-list <path_to_issues_directory>
 ```
 The output is `issue_list.json` which is later used in the SZZ algorithm.
+
+An example output of this script can be found in [the examples](./examples/FindBugFixes.md).
 
 ### Identify bug-introducing commits (SZZ Phase 2) ###
 This implementation works regardless which language and file type. It uses
@@ -96,6 +103,10 @@ which could lead to a bug introduction and fix. This file is not sorted in any
 way and it includes duplicates when it comes to both introducers and fixes. A
 fix can be made several times and a introducer could be responsible for many
 fixes.
+
+## Configuring SZZ Unleashed
+
+A description of how to configure SZZUnleashed further can be found in [the examples](./examples/BugIntroducersFinder.md).
 
 ## Use SZZ Unleashed with Docker <a name="szz_docker"></a>
 
@@ -222,6 +233,10 @@ be made. In this example, we train a random forest classifier. To do this, run t
 ```python
 python model.py train
 ```
+
+## Examples and executables <a name="examples_n_exec"></a>
+
+In [the examples](./examples) directory, one can find documents containing descriptions about each script. There is also [a data directory](./examples/data) where one can find data produced by the scripts. It can be used to either study how the output should look like or if anyone just want a dataset to train on.
 
 ## Authors <a name="authors"></a>
 
