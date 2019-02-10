@@ -27,7 +27,7 @@ As a result, one is provided with a [ash shell](https://linux.die.net/man/1/ash)
 docker run -it --name ssz_con szz ash
 cd /roo/fetch_jira_bugs
 python3 fetch.py --issue-code JENKINS --jira-project issues.jenkins-ci.org
-python3 git_log_to_array.py --repo-path ../jenkins
+python3 git_log_to_array.py --repo-path ../jenkins --from-commit 02d6908ada70fcf8012833ddef628bc09c6f8389
 python3 find_bug_fixes.py --gitlog ./gitlog.json --issue-list ./issues
 cd /root/szz
 java -jar ./build/libs/szz_find_bug_introducers-0.1.jar -i ../fetch_jira_bugs/issue_list.json -r ../jenkins
