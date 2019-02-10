@@ -8,7 +8,6 @@ code-maat/*
 **/.ipynb_checkpoints
 **.retry
 **datasets
-*.json
 
 __pycache__
 
