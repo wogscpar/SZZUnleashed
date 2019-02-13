@@ -6,8 +6,15 @@ Start by locating the *issues* directory, the one produced in the [Fetch](Fetch.
 
 Second, locate the **gitlog.json** that was produced in the [GitLogToArray](GitLogToArray.md) example. Then provide these to the **find_bug_fixes.py** script.
 
+Lastly, identify how a bug fix looks like in a commit. The matching string for the Jenkins project looks like:
+
+```python
+pattern = r'JENKINS-{nbr}\D|#{nbr}\D|HUDSON-{nbr}\D'
+```
+The script will try to find the pattern in each commit and then decide if it's a fixing commit or not.
+
 ```bash
-python find_bug_fixes.py --gitlog <path_to_gitlog>/gitlog.json --issue-list <path_to_issues>/issues
+python find_bug_fixes.py --gitlog <path_to_gitlog>/gitlog.json --issue-list <path_to_issues>/issues --gitlog-pattern "<fix_pattern>"
 ```
 
 In this example, one can use the results in [examples/data](./data) directory.

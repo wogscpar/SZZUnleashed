@@ -52,7 +52,7 @@ An example of this script and what it produces can be found [in the examples](./
 Now using the `find_bug_fixes.py` (see 3 in the [figure](#workflow)) and this file, we can get a json file
 that contains the Issue and its corresponding commit SHA-1, the commit date, the creation date and the resolution date. Just run:
 ```python
-python find_bug_fixes.py --gitlog <path_to_gitlog_file> --issue-list <path_to_issues_directory>
+python find_bug_fixes.py --gitlog <path_to_gitlog_file> --issue-list <path_to_issues_directory> --gitlog-pattern "<a_pattern_for_matching_fixes>"
 ```
 The output is `issue_list.json` which is later used in the SZZ algorithm.
 
