@@ -8,7 +8,7 @@ import json
 import re
 import argparse
 
-def find_bug_fixes(issue_path, gitlog_path):
+def find_bug_fixes(issue_path, gitlog_path, gitlog_pattern):
     """ Identify bugfixes in Jenkins repository given a list of issues """
 
     i = 0 # Used to display progress
@@ -25,7 +25,7 @@ def find_bug_fixes(issue_path, gitlog_path):
         matches = []
 
         for commit in gitlog:
-            pattern = r'JENKINS-{nbr}\D|#{nbr}\D|HUDSON-{nbr}\D'.format(nbr=nbr)
+            pattern = gitlog_pattern.format(nbr=nbr)
             if re.search(pattern, commit):
                 if re.search(r'#{nbr}\D'.format(nbr=nbr), commit) \
                     and not re.search('[Ff]ix', commit):
@@ -102,9 +102,11 @@ def main():
                         help='Path to json file containing gitlog')
     parser.add_argument('--issue-list', type=str,
                         help='Path to directory containing issue json files')
+    parser.add_argument('--gitlog-pattern', type=str,
+                        help='Pattern to match a bugfix')
     args = parser.parse_args()
 
-    issue_list = find_bug_fixes(args.issue_list, args.gitlog)
+    issue_list = find_bug_fixes(args.issue_list, args.gitlog, args.gitlog_pattern)
     with open('issue_list.json', 'w') as f:
         f.write(json.dumps(issue_list))
 
