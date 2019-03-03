@@ -1,4 +1,4 @@
-### How to generate fix and bug introducing pairs using Docker
+### How to run SZZ Unleashed using the provided Docker image
 
 Docker is a great tool if one is using a system where either the Python or Java installation is not working properly. It requires Docker to be installed which is something that won't be covered here but can be found in Docker's own [installation instructions](https://docs.docker.com/install/). To get further information about what Docker is, read the overall Docker [documentation](https://docs.docker.com/).
 
