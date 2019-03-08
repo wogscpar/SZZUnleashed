@@ -5,6 +5,9 @@ The implementation uses "line number mappings" as proposed by Williams and Spacc
 
 This repository responds to the call for public SZZ implementations by Rodríguez-Pérez, Robles, and González-Barahona. ["Reproducibility and Credibility in Empirical Software Engineering: A Case Study Based on a Systematic Literature Review of the use of the SZZ Algorithm"](https://www.researchgate.net/publication/323843822_Reproducibility_and_Credibility_in_Empirical_Software_Engineering_A_Case_Study_based_on_a_Systematic_Literature_Review_of_the_use_of_the_SZZ_algorithm), *Information and Software Technology*, Volume 99, 2018.
 
+If you find SZZ Unleashed useful for your research, please cite our paper:
+- Borg, M., Svensson, O., Berg, K., & Hansson, D. (2019). SZZ Unleashed: An Open Implementation of the SZZ Algorithm - Featuring Example Usage in a Study of Just-in-Time Bug Prediction for the Jenkins Project. arXiv preprint arXiv:1903.01742.
+
 # Table of Contents
 1. [Background](#background)
 2. [Running SZZ Unleashed](#szz_usage)
