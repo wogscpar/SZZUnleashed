@@ -113,7 +113,7 @@ A description of how to configure SZZUnleashed further can be found in [the exam
 
 ## Use SZZ Unleashed with Docker <a name="szz_docker"></a>
 
-A more thorough instruction in using docker to produce the results can be found in [doc/Docker.md](doc/Docker.md). Below is a very brief instruction.
+A more thorough instruction in using Docker to produce the results can be found in [doc/Docker.md](doc/Docker.md). Below is a very brief instruction.
 
 There exists a *Dockerfile* in the repository. It contains all the steps in chronological order that is needed to generate the `fix_and_bug_introducing_pairs.json`. Simply run this command in the directory where the Dockerfile is located:
 
