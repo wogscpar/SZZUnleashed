@@ -41,6 +41,13 @@ public class RevisionCombinationGenerator {
   private List<String> sa;
   private List<String> sb;
 
+  /*
+  * Temporary holder for the iterator.
+  */
+  private Set<String> revs;
+  private Set<String> issues;
+  private List<String> all_commits;
+
   /**
    * Constructor
    */
@@ -142,6 +149,35 @@ public class RevisionCombinationGenerator {
 
     numLeft = numLeft.subtract(BigInteger.ONE);
     return a;
+  }
+
+  public RevisionCombinationGenerator iterator() {
+    this.revs = new HashSet<>(this.sa);
+    this.issues = new HashSet<>(this.sb);
+    this.all_commits = Stream.concat(this.sa.stream(), this.sb.stream()).collect(Collectors.toList());
+
+    return this;
+  }
+
+  public boolean hasNext() {
+    if (r != 2) return false;
+    return hasMore();
+  }
+
+  public String[] getNextIndic() {
+    int[] indices;
+    indices = getNext();
+
+    String c1 = this.all_commits.get(indices[0]);
+    String c2 = this.all_commits.get(indices[1]);
+
+    if (revs.contains(c1) && issues.contains(c2)) {
+      return new String[]{c1, c2};
+    } else if (revs.contains(c2) && issues.contains(c1)) {
+      return new String[]{c2, c1};
+    }
+
+    return new String[]{"", ""};
   }
 
   public List<String[]> generateRevIssuePairs() {

@@ -182,8 +182,13 @@ public class SimpleBugIntroducerFinder implements BugIntroducerFinder {
       List<String> issues = bucketIssues.get(entry.getKey());
 
       RevisionCombinationGenerator gen = new RevisionCombinationGenerator(introducers, issues, 2);
-      List<String[]> revisions = gen.generateRevIssuePairs();
-      for (String[] pair : revisions) {
+      gen = gen.iterator();
+
+      while(gen.hasNext()) {
+        String[] pair = gen.getNextIndic();
+        if (pair[0] == "" && pair[1] == "")
+          continue;
+        
         if (isWithinTimeframe(pair[1], pair[0])) {
           bugIntroducers.add(pair);
         } else {
@@ -209,9 +214,12 @@ public class SimpleBugIntroducerFinder implements BugIntroducerFinder {
       List<String> issues = partialIssues.get(suspects.getKey());
 
       RevisionCombinationGenerator gen = new RevisionCombinationGenerator(introducers, issues, 2);
-      List<String[]> revisions = gen.generateRevIssuePairs();
+      gen = gen.iterator();
 
-      for (String[] pair : revisions) {
+      while(gen.hasNext()) {
+        String[] pair = gen.getNextIndic();
+        if (pair[0] == "" && pair[1] == "")
+          continue;
         if (isPartialFix(pair[0])) {
           bugIntroducers.add(pair);
         }
