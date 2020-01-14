@@ -38,6 +38,8 @@ import org.eclipse.jgit.storage.pack.PackConfig;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import util.Configuration;
+
 /**
  * A diff class that gives the diffing lines between two revisions.
  *
@@ -46,6 +48,8 @@ import org.json.simple.JSONObject;
 public class DiffingLines {
 
   private int customContext;
+
+  private boolean omitLineText;
 
   private Repository repo = null;
 
@@ -89,6 +93,9 @@ public class DiffingLines {
     }
 
     this.customContext = customContext;
+
+    Configuration conf = Configuration.getInstance();
+    this.omitLineText = conf.getOmitLineText();
   }
 
   /**
@@ -164,16 +171,29 @@ public class DiffingLines {
             String[] info = null;
 
             if (firstIndex < first.getBeginA() || last + 1 < i) {
-                info = new String[]{Integer.toString(firstIndex), old.getString(firstIndex)};
+                if (this.omitLineText) {
+                  info = new String[]{Integer.toString(firstIndex), Integer.toString(firstIndex)};
+                } else {
+                  info = new String[]{Integer.toString(firstIndex), old.getString(firstIndex)};
+                }
                 lines.insertions.add(info);
+                
                 firstIndex+=1;
                 secondIndex+=1;
             } else if (firstIndex < first.getEndA()) {
-                info = new String[]{Integer.toString(firstIndex), old.getString(firstIndex)};
+                if (this.omitLineText) {
+                  info = new String[]{Integer.toString(firstIndex), Integer.toString(firstIndex)};
+                } else {
+                  info = new String[]{Integer.toString(firstIndex), old.getString(firstIndex)};
+                }
                 lines.deletions.add(info);
                 firstIndex+=1;
             } else if (secondIndex < first.getEndB()) {
-                info = new String[]{Integer.toString(secondIndex), present.getString(secondIndex)};
+                if (this.omitLineText) {
+                  info = new String[]{Integer.toString(secondIndex), Integer.toString(secondIndex)};
+                } else {
+                  info = new String[]{Integer.toString(secondIndex), present.getString(secondIndex)};
+                }
                 lines.insertions.add(info);
                 secondIndex+=1;
             }

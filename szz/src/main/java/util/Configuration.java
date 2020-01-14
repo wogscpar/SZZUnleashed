@@ -48,6 +48,8 @@ public class Configuration {
   private String resPath = "results";
   private String partialFixPattern = "fix";
 
+  private boolean omitLineText = false;
+
   public String helpHeader = "Commandline options for the SZZ algorithm.";
   public String helpFooter = "The results will be produced in ./results";
 
@@ -120,6 +122,10 @@ public class Configuration {
 
     if (cmd.hasOption("p")) {
       instance.setPartialFixPattern(cmd.getOptionValue("p"));
+    }
+
+    if (cmd.hasOption("olt")) {
+      instance.setOmitLineText(true);
     }
 
     return instance;
@@ -197,6 +203,14 @@ public class Configuration {
     this.partialFixPattern = pattern;
   }
 
+  public boolean getOmitLineText() {
+    return this.omitLineText;
+  }
+
+  protected void setOmitLineText(boolean omitLineText) {
+    this.omitLineText = omitLineText;
+  }
+
   private static Options getCMDOptions() {
     Options options = new Options();
 
@@ -237,6 +251,11 @@ public class Configuration {
             "Specify the pattern that should be used when maching bug fixes. Defaults to \"fix\"");
     partialFixPatternOption.setRequired(false);
     options.addOption(partialFixPatternOption);
+
+    Option omitLineTextOption =
+        new Option("olt", false, "Only output the line numbers in the annotation graph.");
+    omitLineTextOption.setRequired(false);
+    options.addOption(omitLineTextOption);
 
     return options;
   }
