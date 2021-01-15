@@ -13,12 +13,9 @@ __pycache__
 
 szz/bin/*
 szz/build/*
-szz/gradle
 szz/jars
-szz/gradlew
 szz/run
 szz/gerrit_all_commits_without_patchsets.json
-szz/gradlew.bat
 szz/bugReports.txt
 szz/historyCommits.txt
 szz/information
