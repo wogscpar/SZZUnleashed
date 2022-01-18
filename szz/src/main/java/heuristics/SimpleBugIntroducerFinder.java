@@ -190,7 +190,7 @@ public class SimpleBugIntroducerFinder implements BugIntroducerFinder {
           continue;
         
         if (isWithinTimeframe(pair[1], pair[0])) {
-          bugIntroducers.add(pair);
+          bugIntroducers.add(new String[] {pair[1], pair[0]});
         } else {
 
           if (!partialIntroducers.containsKey(entry.getKey())) {
@@ -220,8 +220,8 @@ public class SimpleBugIntroducerFinder implements BugIntroducerFinder {
         String[] pair = gen.getNextIndic();
         if (pair[0] == "" && pair[1] == "")
           continue;
-        if (isPartialFix(pair[0])) {
-          bugIntroducers.add(pair);
+        if (isPartialFix(pair[1])) {
+          bugIntroducers.add(new String[] {pair[1], pair[0]});
         }
       }
     }
