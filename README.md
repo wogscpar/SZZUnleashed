@@ -118,7 +118,7 @@ A more thorough instruction in using Docker to produce the results can be found 
 There exists a *Dockerfile* in the repository. It contains all the steps in chronological order that is needed to generate the `fix_and_bug_introducing_pairs.json`. Simply run this command in the directory where the Dockerfile is located:
 
 ```bash
-docker build -t ssz .
+docker build -t szz .
 ```
 
 Then start a temporary docker container:

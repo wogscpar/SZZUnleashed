@@ -99,12 +99,18 @@ def main():
                                                     the issue directory is created and populated using
                                                     the fetch.py script.""")
     parser.add_argument('--gitlog', type=str,
-                        help='Path to json file containing gitlog')
+                        help='Path to json file containing gitlog', 
+                        required = True)
     parser.add_argument('--issue-list', type=str,
-                        help='Path to directory containing issue json files')
+                        help='Path to directory containing issue json files', 
+                        required = True)
     parser.add_argument('--gitlog-pattern', type=str,
-                        help='Pattern to match a bugfix')
+                        help='Pattern to match a bugfix', 
+                        required = True)
     args = parser.parse_args()
+
+    # display gitlog_pattern to the console
+    print('Confirming gitlog_pattern: ' + args.gitlog_pattern)
 
     issue_list = find_bug_fixes(args.issue_list, args.gitlog, args.gitlog_pattern)
     with open('issue_list.json', 'w') as f:
