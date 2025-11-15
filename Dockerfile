@@ -1,4 +1,4 @@
-FROM java:8-jdk-alpine
+FROM eclipse-temurin:8-jdk-alpine
 
 RUN apk add --no-cache --update python3 git
 
